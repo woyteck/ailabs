@@ -2,7 +2,7 @@ package main
 
 import (
 	"os"
-	"woyteck/ailabs/task_inprompt"
+	"woyteck/ailabs/task_embedding"
 
 	"github.com/joho/godotenv"
 )
@@ -19,5 +19,6 @@ func main() {
 	// task_moderation.TaskModeration(apiKey)
 	// task_blogger.TaskBlogger(apiKey)
 	// task_liar.TaskLiar(apiKey)
-	task_inprompt.TaskInprompt(apiKey)
+	// task_inprompt.TaskInprompt(apiKey)
+	task_embedding.TaskEmbedding(apiKey)
 }

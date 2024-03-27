@@ -88,6 +88,25 @@ type ModerationResponse struct {
 	Results []ModerationResult `json:"results"`
 }
 
+type EmbeddingRequest struct {
+	Input          string `json:"input"`
+	Model          string `json:"model"`
+	EncodingFormat string `json:"encoding_format"`
+}
+
+type EmbeddingData struct {
+	Object    string    `json:"object"`
+	Embedding []float64 `json:"embedding"`
+	Index     int       `json:"index"`
+}
+
+type EmbeddingResponse struct {
+	Object string          `json:"object"`
+	Data   []EmbeddingData `json:"data"`
+	Model  string          `json:"model"`
+	Usage  Usage           `json:"usage"`
+}
+
 func GetCompletion(messages []Message, model string) CompletionResponse {
 	url := "https://api.openai.com/v1/chat/completions"
 
@@ -139,6 +158,7 @@ func GetModeration(input string) (bool, ModerationResponse) {
 		log.Fatalf("Error occured %v", err)
 	}
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", os.Getenv("OPENAI_KEY")))
+	req.Header.Add("Content-Type", "application/json")
 
 	response, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -161,4 +181,38 @@ func GetModeration(input string) (bool, ModerationResponse) {
 	}
 
 	return isFlagged, result
+}
+
+func GetEmbedding(input string, model string) []EmbeddingData {
+	url := "https://api.openai.com/v1/embeddings"
+
+	request := EmbeddingRequest{
+		Input:          input,
+		Model:          model,
+		EncodingFormat: "float",
+	}
+
+	postBody, _ := json.Marshal(request)
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(postBody))
+	if err != nil {
+		log.Fatalf("Error occured %v", err)
+	}
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", os.Getenv("OPENAI_KEY")))
+	req.Header.Add("Content-Type", "application/json")
+
+	response, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Fatalf("Error occured %v", err)
+	}
+
+	defer response.Body.Close()
+
+	var result EmbeddingResponse
+	err = json.NewDecoder(response.Body).Decode(&result)
+	if err != nil {
+		log.Fatal("Can not unmarshall JSON")
+	}
+
+	return result.Data
 }
