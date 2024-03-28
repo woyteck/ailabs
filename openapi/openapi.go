@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"os"
 )
@@ -105,6 +106,10 @@ type EmbeddingResponse struct {
 	Data   []EmbeddingData `json:"data"`
 	Model  string          `json:"model"`
 	Usage  Usage           `json:"usage"`
+}
+
+type TranscriptionResponse struct {
+	Text string `json:"text"`
 }
 
 func GetCompletion(messages []Message, model string) CompletionResponse {
@@ -215,4 +220,39 @@ func GetEmbedding(input string, model string) []EmbeddingData {
 	}
 
 	return result.Data
+}
+
+func GetTranscription(file []byte, model string) string {
+	url := "https://api.openai.com/v1/audio/transcriptions"
+
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	filePart, _ := writer.CreateFormFile("file", "file.mp3")
+	filePart.Write(file)
+	writer.WriteField("model", model)
+	writer.Close()
+
+	req, err := http.NewRequest("POST", url, body)
+	if err != nil {
+		log.Fatalf("Error occured %v", err)
+	}
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", os.Getenv("OPENAI_KEY")))
+	req.Header.Add("Content-Type", writer.FormDataContentType())
+
+	response, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Fatalf("Error occured %v", err)
+	}
+
+	fmt.Println(response.StatusCode)
+
+	defer response.Body.Close()
+
+	var result TranscriptionResponse
+	err = json.NewDecoder(response.Body).Decode(&result)
+	if err != nil {
+		log.Fatal("Can not unmarshall JSON")
+	}
+
+	return result.Text
 }
