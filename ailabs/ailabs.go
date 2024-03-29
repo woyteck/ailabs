@@ -74,7 +74,7 @@ func AnswerString(token string, answer string) string {
 	return string(body)
 }
 
-func AnswerArray[T any](token string, answer T) string {
+func AnswerAny[T any](token string, answer T) string {
 	url := fmt.Sprintf("https://tasks.aidevs.pl/answer/%v", token)
 	postBody, _ := json.Marshal(map[string]T{
 		"answer": answer,

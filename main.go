@@ -2,7 +2,7 @@ package main
 
 import (
 	"os"
-	"woyteck/ailabs/task_whisper"
+	"woyteck/ailabs/task_functions"
 
 	"github.com/joho/godotenv"
 )
@@ -21,5 +21,6 @@ func main() {
 	// task_liar.TaskLiar(apiKey)
 	// task_inprompt.TaskInprompt(apiKey)
 	// task_embedding.TaskEmbedding(apiKey)
-	task_whisper.TaskWhisper(apiKey)
+	// task_whisper.TaskWhisper(apiKey)
+	task_functions.TaskFunctions(apiKey)
 }

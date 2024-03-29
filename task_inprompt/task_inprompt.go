@@ -59,7 +59,7 @@ func extractNameFromQuestion(question string) (string, error) {
 		{Role: "system", Content: "I return only a person's name from the given sentence."},
 		{Role: "user", Content: question},
 	}
-	response := openapi.GetCompletion(messages, "gpt-4")
+	response := openapi.GetCompletionShort(messages, "gpt-4")
 	if len(response.Choices) == 0 {
 		return "", errors.New("could not find name")
 	}
@@ -72,7 +72,7 @@ func answerQuestion(question string, facts string) (string, error) {
 		{Role: "system", Content: facts},
 		{Role: "user", Content: question},
 	}
-	response := openapi.GetCompletion(messages, "gpt-4")
+	response := openapi.GetCompletionShort(messages, "gpt-4")
 	if len(response.Choices) == 0 {
 		return "", errors.New("could not answer question")
 	}

@@ -37,6 +37,6 @@ func TaskModeration(apiKey string) {
 	}
 	fmt.Println(results)
 
-	answerResult := ailabs.AnswerArray(token, results)
+	answerResult := ailabs.AnswerAny(token, results)
 	fmt.Println(answerResult)
 }

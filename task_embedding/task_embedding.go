@@ -30,6 +30,6 @@ func TaskEmbedding(apiKey string) {
 
 	embeddings := openapi.GetEmbedding("Hawaiian pizza", "text-embedding-ada-002")
 
-	answerResult := ailabs.AnswerArray(token, embeddings[0].Embedding)
+	answerResult := ailabs.AnswerAny(token, embeddings[0].Embedding)
 	fmt.Println(answerResult)
 }

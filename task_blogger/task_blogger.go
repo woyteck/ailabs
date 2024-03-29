@@ -38,10 +38,10 @@ func TaskBlogger(apiKey string) {
 		{Role: "system", Content: context},
 		{Role: "user", Content: prompt},
 	}
-	response := openapi.GetCompletion(messages, "gpt-4")
+	response := openapi.GetCompletionShort(messages, "gpt-4")
 
 	text := response.Choices[0].Message.Content
 
-	answerResult := ailabs.AnswerArray(token, strings.Split(text, "####"))
+	answerResult := ailabs.AnswerAny(token, strings.Split(text, "####"))
 	fmt.Println(answerResult)
 }

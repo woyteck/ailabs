@@ -28,12 +28,30 @@ type Usage struct {
 	TotalTokens      int `json:"total_tokens"`
 }
 
+type Function struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Parameters  any    `json:"parameters"`
+}
+
+type Tool struct {
+	Type     string   `json:"type"`
+	Function Function `json:"function"`
+}
+
+type Param struct {
+	Type        string   `json:"type"`
+	Description string   `json:"description,omitempty"`
+	Enum        []string `json:"enum,omitempty"`
+}
+
 type CompletionRequest struct {
 	Model    string    `json:"model"`
 	Messages []Message `json:"messages"`
 	N        int       `json:"n,omitempty"`
 	Stream   bool      `json:"stream,omitempty"`
 	User     string    `json:"user,omitempty"`
+	Tools    []Tool    `json:"tools"`
 }
 
 type CompletionResponse struct {
@@ -112,13 +130,8 @@ type TranscriptionResponse struct {
 	Text string `json:"text"`
 }
 
-func GetCompletion(messages []Message, model string) CompletionResponse {
+func GetCompletion(request CompletionRequest) CompletionResponse {
 	url := "https://api.openai.com/v1/chat/completions"
-
-	request := CompletionRequest{
-		Model:    model,
-		Messages: messages,
-	}
 
 	postBody, _ := json.Marshal(request)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(postBody))
@@ -147,6 +160,15 @@ func GetCompletion(messages []Message, model string) CompletionResponse {
 	}
 
 	return result
+}
+
+func GetCompletionShort(messages []Message, model string) CompletionResponse {
+	request := CompletionRequest{
+		Model:    model,
+		Messages: messages,
+	}
+
+	return GetCompletion(request)
 }
 
 func GetModeration(input string) (bool, ModerationResponse) {
