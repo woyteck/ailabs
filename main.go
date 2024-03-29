@@ -2,7 +2,7 @@ package main
 
 import (
 	"os"
-	"woyteck/ailabs/task_functions"
+	"woyteck/ailabs/task_rodo"
 
 	"github.com/joho/godotenv"
 )
@@ -22,5 +22,6 @@ func main() {
 	// task_inprompt.TaskInprompt(apiKey)
 	// task_embedding.TaskEmbedding(apiKey)
 	// task_whisper.TaskWhisper(apiKey)
-	task_functions.TaskFunctions(apiKey)
+	// task_functions.TaskFunctions(apiKey)
+	task_rodo.TaskRodo(apiKey)
 }
