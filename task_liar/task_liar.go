@@ -64,7 +64,6 @@ func IsLying(question string, answer string) bool {
 	prompt += fmt.Sprintf("Question: %v\n", question)
 	prompt += fmt.Sprintf("Answer: %v\n", answer)
 	prompt += "Give me a simple yes/no answer"
-	// fmt.Printf("IsLying prompt: %v\n", prompt)
 
 	messages := []openapi.Message{
 		{Role: "system", Content: context},
@@ -73,7 +72,6 @@ func IsLying(question string, answer string) bool {
 	response := openapi.GetCompletionShort(messages, "gpt-4")
 
 	text := response.Choices[0].Message.Content
-	// fmt.Printf("IsLying response: %v\n", text)
 
 	return strings.ToLower(text) == "no"
 }
@@ -94,11 +92,6 @@ func PostTask(token string, question string) string {
 	}
 
 	defer response.Body.Close()
-
-	// body, err := io.ReadAll(response.Body)
-	// if err != nil {
-	// 	log.Fatal("Coult not read response")
-	// }
 
 	var result Answer
 	if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
