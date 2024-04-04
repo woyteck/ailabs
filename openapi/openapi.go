@@ -138,7 +138,7 @@ func GetCompletion(request CompletionRequest) CompletionResponse {
 	if err != nil {
 		log.Fatalf("Error occured %v", err)
 	}
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", os.Getenv("OPENAI_KEY")))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", os.Getenv("OPENAI_API_KEY")))
 	req.Header.Add("Content-Type", "application/json")
 	response, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -184,7 +184,7 @@ func GetModeration(input string) (bool, ModerationResponse) {
 	if err != nil {
 		log.Fatalf("Error occured %v", err)
 	}
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", os.Getenv("OPENAI_KEY")))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", os.Getenv("OPENAI_API_KEY")))
 	req.Header.Add("Content-Type", "application/json")
 
 	response, err := http.DefaultClient.Do(req)
@@ -225,7 +225,7 @@ func GetEmbedding(input string, model string) []EmbeddingData {
 	if err != nil {
 		log.Fatalf("Error occured %v", err)
 	}
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", os.Getenv("OPENAI_KEY")))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", os.Getenv("OPENAI_API_KEY")))
 	req.Header.Add("Content-Type", "application/json")
 
 	response, err := http.DefaultClient.Do(req)
@@ -258,7 +258,7 @@ func GetTranscription(file []byte, model string) string {
 	if err != nil {
 		log.Fatalf("Error occured %v", err)
 	}
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", os.Getenv("OPENAI_KEY")))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", os.Getenv("OPENAI_API_KEY")))
 	req.Header.Add("Content-Type", writer.FormDataContentType())
 
 	response, err := http.DefaultClient.Do(req)
