@@ -210,7 +210,7 @@ func GetModeration(input string) (bool, ModerationResponse) {
 	return isFlagged, result
 }
 
-func GetEmbedding(input string, model string) []EmbeddingData {
+func GetEmbedding(input string, model string) []float64 {
 	url := "https://api.openai.com/v1/embeddings"
 
 	request := EmbeddingRequest{
@@ -241,7 +241,11 @@ func GetEmbedding(input string, model string) []EmbeddingData {
 		log.Fatal("Can not unmarshall JSON")
 	}
 
-	return result.Data
+	if len(result.Data) == 0 {
+		log.Fatal("No embeddings returned")
+	}
+
+	return result.Data[0].Embedding
 }
 
 func GetTranscription(file []byte, model string) string {

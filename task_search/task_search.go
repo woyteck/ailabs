@@ -141,8 +141,6 @@ func upsert(pointsClient pb.PointsClient, data []float32, url string, num int) {
 	if err != nil {
 		panic(err)
 	}
-
-	log.Println("Upsert", len(upsertPoints), "points")
 }
 
 func createCollection(collectionsClient pb.CollectionsClient) {
