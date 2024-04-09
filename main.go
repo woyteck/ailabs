@@ -2,7 +2,7 @@ package main
 
 import (
 	"os"
-	"woyteck/ailabs/task_knowledge"
+	"woyteck/ailabs/task_tools"
 
 	"github.com/joho/godotenv"
 )
@@ -28,5 +28,6 @@ func main() {
 	// task_whoami.TaskWhoami(apiKey)
 	// task_search.TaskSearch(apiKey)
 	// task_people.TaskPeople(apiKey)
-	task_knowledge.TaskKnowledge(apiKey)
+	// task_knowledge.TaskKnowledge(apiKey)
+	task_tools.TaskTools(apiKey)
 }
