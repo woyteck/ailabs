@@ -11,9 +11,24 @@ import (
 	"os"
 )
 
+type ImageMessage struct {
+	Role    string    `json:"role"`
+	Content []Content `json:"content"`
+}
+
 type Message struct {
 	Role    string `json:"role"`
 	Content string `json:"content"`
+}
+
+type ImageURL struct {
+	URL string `json:"url"`
+}
+
+type Content struct {
+	Type     string   `json:"type"`
+	Text     string   `json:"text,omitempty"`
+	ImageURL ImageURL `json:"image_url,omitempty"`
 }
 
 type Choice struct {
@@ -52,6 +67,15 @@ type CompletionRequest struct {
 	Stream   bool      `json:"stream,omitempty"`
 	User     string    `json:"user,omitempty"`
 	Tools    []Tool    `json:"tools"`
+}
+
+type ImageCompletionRequest struct {
+	Model    string         `json:"model"`
+	Messages []ImageMessage `json:"messages"`
+	N        int            `json:"n,omitempty"`
+	Stream   bool           `json:"stream,omitempty"`
+	User     string         `json:"user,omitempty"`
+	Tools    []Tool         `json:"tools"`
 }
 
 type CompletionResponse struct {
@@ -160,6 +184,47 @@ func GetCompletion(request CompletionRequest) CompletionResponse {
 	}
 
 	return result
+}
+
+func GetImageCompletion(request ImageCompletionRequest) CompletionResponse {
+	url := "https://api.openai.com/v1/chat/completions"
+
+	postBody, _ := json.Marshal(request)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(postBody))
+	if err != nil {
+		log.Fatalf("Error occured %v", err)
+	}
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", os.Getenv("OPENAI_API_KEY")))
+	req.Header.Add("Content-Type", "application/json")
+	response, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Fatalf("Error occured %v", err)
+	}
+
+	defer response.Body.Close()
+	if response.StatusCode >= 400 {
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			log.Fatal("Coult not read response")
+		}
+		fmt.Println(string(body))
+	}
+
+	var result CompletionResponse
+	if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
+		log.Fatal("Can not unmarshall JSON")
+	}
+
+	return result
+}
+
+func GetImageCompletionShort(messages []ImageMessage, model string) CompletionResponse {
+	request := ImageCompletionRequest{
+		Model:    model,
+		Messages: messages,
+	}
+
+	return GetImageCompletion(request)
 }
 
 func GetCompletionShort(messages []Message, model string) CompletionResponse {
