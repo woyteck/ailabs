@@ -2,7 +2,7 @@ package main
 
 import (
 	"os"
-	"woyteck/ailabs/task_ownapi"
+	"woyteck/ailabs/task_ownapipro"
 
 	"github.com/joho/godotenv"
 )
@@ -10,7 +10,7 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		panic("Coult not load .env file")
+		panic("could not load .env file")
 	}
 
 	apiKey := os.Getenv("AIDEVS_KEY")
@@ -31,5 +31,6 @@ func main() {
 	// task_knowledge.TaskKnowledge(apiKey)
 	// task_tools.TaskTools(apiKey)
 	// task_gnome.TaskGnome(apiKey)
-	task_ownapi.TaskOwnapi(apiKey)
+	// task_ownapi.TaskOwnapi(apiKey)
+	task_ownapipro.TaskOwnapipro(apiKey)
 }
