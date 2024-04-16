@@ -2,7 +2,7 @@ package main
 
 import (
 	"os"
-	"woyteck/ailabs/task_meme"
+	"woyteck/ailabs/task_optimaldb"
 
 	"github.com/joho/godotenv"
 )
@@ -33,5 +33,6 @@ func main() {
 	// task_gnome.TaskGnome(apiKey)
 	// task_ownapi.TaskOwnapi(apiKey)
 	// task_ownapipro.TaskOwnapipro(apiKey)
-	task_meme.TaskMeme(apiKey)
+	// task_meme.TaskMeme(apiKey)
+	task_optimaldb.TaskOptimaldb(apiKey)
 }
